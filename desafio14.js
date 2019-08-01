@@ -37,6 +37,7 @@ function atualizaUi()
     arrUiItemSelecionado = arrUiListaSelecionada.getElementsByTagName("li")[cursorIndices.item];
     arrUiItemSelecionado.classList.add("selected");
 
+    document.getElementById("spanCursor").innerHTML = "Indices: " + JSON.stringify(cursorIndices);
 }
 
 function teclaPressionadaEvent() {
