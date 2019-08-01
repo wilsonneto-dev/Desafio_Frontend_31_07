@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <style>
+        body {text-align: center;}
+    </style>
+
+</head>
+<body>
+    
+    <form>
+
+            <label>Entrada:</label>
+            <input type="time" id="input-entrada" autofocus />
+    
+            <label>Saida:</label>
+            <input type="time" id="input-saida" autofocus />
+
+            <input type="button" value="calcular" id="btn-calcular">
+                
+    </form>
+
+    <div>
+        <p>Total a pagar: <span id="span-valor"></span></p>
+    </div>
+
+    <script>
+        
+        const taxaEntrada = 2;
+        const primeiraHoraCusto = 3;
+        const horaAdicionalCusto = 4;
+
+        var inputEntrada = document.getElementById("input-entrada");
+        var inputSaida = document.getElementById("input-saida");
+        var btnCalcular = document.getElementById("btn-calcular");
+        var form = document.forms[0];
+        var spanValor = document.getElementById("span-valor");
+
+        function calculaCusto(strHorarioEntrada, strHorarioSaida)
+        {
+            // verificar se está no padrão
+            var regexValidacao = new RegExp("\\d{2}:\\d{2}");
+            if( !(regexValidacao.test(strHorarioEntrada) && regexValidacao.test(strHorarioSaida)) )
+            {
+                window.alert("Utilize o formato HH:MM");
+                return 0;
+            }
+            
+            var arrHorarioEntrada = strHorarioEntrada.split(":").map( x => Number.parseInt(x) );
+            var arrHorarioSaida = strHorarioSaida.split(":").map( x => Number.parseInt(x) );
+
+            var horasEntrada = arrHorarioEntrada[0];
+            var minutosEntrada = arrHorarioEntrada[1];
+
+            var horasSaida = arrHorarioSaida[0];
+            var minutosSaida = arrHorarioSaida[1];
+
+            // verificar se são horas e minutos válidos
+            if(
+                horasEntrada < 0 || horasEntrada > 23 || minutosEntrada < 0 || minutosEntrada > 59 ||
+                horasSaida < 0 || horasSaida > 23 || minutosSaida < 0 || minutosSaida > 59
+            ){
+                window.alert("Verifique as datas inseridas...");
+                return 0;
+            }
+
+            // obter a diferença
+            var difHoras = horasSaida - horasEntrada;
+            var difMinutos = minutosSaida - minutosEntrada;
+            if(difMinutos < 0)
+            {
+                difHoras = difHoras - 1;
+                difMinutos = 60 + difMinutos;
+            }
+
+            if(difHoras < 0) 
+            {
+                window.alert("Verifique as datas inseridas, a entrada deve ser antes...");
+                return 0;
+            }
+
+            // calculo do custo
+            var valorPagar = 0;
+            valorPagar += taxaEntrada;
+            valorPagar += primeiraHoraCusto;
+            valorPagar += ((difHoras -1) * horaAdicionalCusto);
+            if(difHoras > 0 && difMinutos>0)
+                valorPagar += horaAdicionalCusto;
+            
+            return valorPagar;
+
+        }
+
+        function calcularValorEvent(event)
+        {
+            var strHorarioEntrada = inputEntrada.value;
+            var strHorarioSaida = inputSaida.value;
+
+            var valorPagar = calculaCusto(strHorarioEntrada, strHorarioSaida);
+            spanValor.innerHTML = "R$ " + valorPagar.toFixed(2);
+        }
+
+        btnCalcular.addEventListener("click", calcularValorEvent);
+        form.addEventListener('submit', calcularValorEvent);
+
+    </script>
+
+</body>
+</html>
