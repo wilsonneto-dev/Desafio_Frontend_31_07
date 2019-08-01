@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { text-align: center; }
+    </style>
+</head>
+<body>
+    
+    <form>
+        <input type="number" placeholder="Insira o n&uacute;mero" id="input-numero" autofocus>
+        <input type="button" value="Add" id="button-add">
+    </form>
+
+    <div>
+        <p>N&uacute;meros: <span id="numeros-bind">[vazio]</span></p>
+    </div>
+
+    <script>
+        
+        var numeros = new Array();
+        var elmNumerosBind = document.getElementById("numeros-bind");
+        var btnAdd = document.getElementById("button-add");
+
+        function addNumero(x)
+        {
+            numeros.push(x);
+            numeros.sort((x,y) => { return (x-y) });
+        };
+
+        function mostrarNumeros()
+        {
+            elmNumerosBind.innerHTML = numeros.join();
+        }
+
+        function addNumeroExecuta( event ){
+            
+            event.preventDefault();
+
+            var inputNumero = document.getElementById("input-numero");
+            var strNumero = inputNumero.value;
+            var numero = Number.parseInt(strNumero);
+
+            if(Number.isInteger(numero))
+            {
+                addNumero(numero);
+                mostrarNumeros();
+                inputNumero.value = "";
+            }
+            else
+            {
+                window.alert("Insira um número válido");
+            }
+        }
+
+        btnAdd.addEventListener("click", addNumeroExecuta);
+        document.forms[0].addEventListener('submit', addNumeroExecuta);
+
+    </script>
+
+</body>
+</html>
