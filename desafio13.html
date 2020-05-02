@@ -84,8 +84,9 @@
             var valorPagar = 0;
             valorPagar += taxaEntrada;
             valorPagar += primeiraHoraCusto;
-            valorPagar += ((difHoras -1) * horaAdicionalCusto);
-            if(difHoras > 0 && difMinutos>0)
+            if(difHoras > 0)
+                valorPagar += ((difHoras -1) * horaAdicionalCusto);
+            if(difHoras > 0 && difMinutos > 0)
                 valorPagar += horaAdicionalCusto;
             
             return valorPagar;
